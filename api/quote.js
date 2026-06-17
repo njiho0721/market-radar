@@ -33,10 +33,12 @@ export default async function handler(req, res) {
 
       const price = Number(match[1].replace(/,/g, ""));
 
-      return res.status(200).json({
-        c: price,
-        source: "naver"
-      });
+return res.status(200).json({
+  c: price,
+  d: 0,
+  dp: 0,
+  source: "naver"
+});
     }
 
     // 미국주식
