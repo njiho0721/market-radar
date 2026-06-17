@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Market Radar C안 - Responsive Dashboard</title>
+  <title>Market Radar - Finnhub Dashboard</title>
   <style>
     :root{--bg:#090b13;--panel:#121625;--panel2:#171d30;--line:#252b43;--text:#e9edf9;--muted:#8e98bb;--green:#39e6a7;--red:#ff5a7d;--yellow:#ffd166;--blue:#6d8cff;--chip:#202844;--shadow:0 18px 45px rgba(0,0,0,.35)}
     *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,#17203c 0,#090b13 38%,#07080d 100%);color:var(--text)}
@@ -30,9 +30,9 @@
         <div class="grid"><div class="span6"><div class="sectionTitle"><h2>관심 ETF / 테마</h2><span class="pill">ETF 중심</span></div><div class="list" id="etfList"></div></div><div class="span6"><div class="sectionTitle"><h2>국내·개별주</h2><span class="pill">직접 추적</span></div><div class="list" id="stockList"></div></div></div>
       </div>
       <div id="tab_edit" class="hidden"><div class="grid"><div class="span6"><div class="sectionTitle"><h2>ETF 추가</h2></div><div class="form"><input class="input" id="etfTicker" placeholder="티커 예: 490090.KS"><input class="input" id="etfName" placeholder="이름 예: TIGER 데이터센터"><select class="select" id="etfTheme"><option>데이터센터</option><option>전력</option><option>광통신</option><option>기타</option></select><button class="btn primary" onclick="addItem('etf')">추가</button></div><p class="help">국내 ETF는 데이터 소스에 따라 종목코드 뒤에 .KS가 필요할 수 있음.</p></div><div class="span6"><div class="sectionTitle"><h2>개별주 추가</h2></div><div class="form"><input class="input" id="stockTicker" placeholder="티커 예: 005930.KS"><input class="input" id="stockName" placeholder="이름 예: 삼성전자"><select class="select" id="stockTheme"><option>국내</option><option>메모리</option><option>AI 인프라</option><option>관심</option></select><button class="btn primary" onclick="addItem('stock')">추가</button></div><p class="help">미국주는 MU, ORCL처럼 입력. 국내주는 005930.KS 같은 형식을 기본으로 잡았음.</p></div></div></div>
-      <div id="tab_news" class="hidden"><div class="news"><b>뉴스 연동 전 임시 메모</b><p>여기에는 나중에 Oracle / HBM / AI datacenter / power / optical network 키워드 뉴스를 붙이면 됨.</p></div><div class="news"><b>데이터 연결 단계</b><p>현재 파일은 Yahoo Finance quote 데이터를 직접/프록시로 호출합니다. 실패 시 임의 가격을 보여주지 않고 연결 실패로 표시합니다.</p></div></div>
+      <div id="tab_news" class="hidden"><div class="news"><b>뉴스 연동 전 임시 메모</b><p>여기에는 나중에 Oracle / HBM / AI datacenter / power / optical network 키워드 뉴스를 붙이면 됨.</p></div><div class="news"><b>데이터 연결 단계</b><p>현재 파일은 Vercel API(/api/quote)를 통해 Finnhub 데이터를 호출합니다. 실패 시 임의 가격을 보여주지 않습니다.</p></div></div>
     </div>
-    <div class="span12 footer">※ Yahoo + 개인 무료서버 연결 v5입니다. 실제 연결 성공 전에는 가격을 표시하지 않습니다. 샘플/랜덤값은 자동으로 숨겼습니다.</div>
+    <div class="span12 footer">※ Finnhub + Vercel 무료서버 연결 v6입니다. 미국주식은 우선 실제 데이터로 연결하고, 국내 ETF/한국주식은 미지원 시 데이터 없음으로 표시됩니다.</div>
   </div>
 </div>
 
@@ -64,12 +64,12 @@ const defaultItems={
   ]
 };
 const marketSymbols=[
-  {key:'nasdaq',ticker:'^IXIC',name:'NASDAQ'},
-  {key:'sox',ticker:'^SOX',name:'SOX'},
-  {key:'usdkrw',ticker:'KRW=X',name:'USD/KRW'},
-  {key:'vix',ticker:'^VIX',name:'VIX'},
-  {key:'wti',ticker:'CL=F',name:'WTI'},
-  {key:'us10y',ticker:'^TNX',name:'미국10년물'}
+  {key:'nasdaq',ticker:'QQQ',name:'NASDAQ 대용(QQQ)'},
+  {key:'sox',ticker:'SOXX',name:'SOX 대용(SOXX)'},
+  {key:'usdkrw',ticker:'OANDA:USD_KRW',name:'USD/KRW'},
+  {key:'vix',ticker:'VIXY',name:'VIX 대용(VIXY)'},
+  {key:'wti',ticker:'USO',name:'WTI 대용(USO)'},
+  {key:'us10y',ticker:'IEF',name:'미국10년물 대용(IEF)'}
 ];
 let items=loadItems(); let market={}; let quotes={}; let lastFetchStatus='대기'; let hasRealData=false;
 function loadItems(){try{return JSON.parse(localStorage.getItem(KEY))||structuredClone(defaultItems)}catch(e){return structuredClone(defaultItems)}}
@@ -97,37 +97,31 @@ function fillSample(){
   market={nasdaq:makeQuote(),sox:makeQuote(),usdkrw:makeQuote(),vix:makeQuote(),wti:makeQuote(),us10y:makeQuote()};
   quotes={}; [...items.etf,...items.stock].forEach(x=>quotes[x.ticker]=makeQuote());
 }
-async function fetchYahoo(symbols){
+async function fetchFinnhub(symbols){
   const unique=[...new Set(symbols.filter(Boolean))];
-  if(!unique.length)return {};
-  const url='https://query1.finance.yahoo.com/v7/finance/quote?symbols='+encodeURIComponent(unique.join(','))+'&lang=ko-KR&region=KR';
   const cfg=loadConfig();
-  const urls=[];
-  if(cfg.proxyUrl){
-    const base=cfg.proxyUrl.replace(/\/$/,'');
-    urls.push({name:'내 무료서버 연결', url:base+'/quote?symbols='+encodeURIComponent(unique.join(','))});
-  }
-  urls.push(
-    {name:'Yahoo 직접 연결', url},
-    {name:'AllOrigins 프록시 연결', url:'https://api.allorigins.win/raw?url='+encodeURIComponent(url)},
-    {name:'Corsproxy.io 연결', url:'https://corsproxy.io/?'+encodeURIComponent(url)},
-    {name:'CodeTabs 프록시 연결', url:'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(url)}
-  );
-  let lastErr;
-  for(const item of urls){
+  const base=(cfg.proxyUrl||location.origin).replace(/\/$/,'');
+  const out={};
+  let okCount=0;
+  for(const symbol of unique){
     try{
-      const res=await fetchWithTimeout(item.url,6500);
-      if(!res.ok) throw new Error(item.name+' HTTP '+res.status);
-      const txt=await res.text();
-      const data=JSON.parse(txt);
-      const rows=data?.quoteResponse?.result||[];
-      if(!rows.length) throw new Error(item.name+' 응답은 왔는데 quote가 비어있음');
-      const out={}; rows.forEach(r=>out[r.symbol]=normalizeYahooQuote(r));
-      lastFetchStatus=item.name;
-      return out;
-    }catch(e){lastErr=e; console.warn('quote fetch failed:', item.name, e.message);}
+      const url=base+'/api/quote?symbol='+encodeURIComponent(symbol);
+      const res=await fetchWithTimeout(url,6500);
+      if(!res.ok) throw new Error(symbol+' HTTP '+res.status);
+      const q=await res.json();
+      if(q && typeof q.c==='number' && q.c!==0){
+        out[symbol]={price:q.c, chg:q.dp, absChange:q.d, prev:q.pc, high:q.h, low:q.l, open:q.o, source:'finnhub'};
+        okCount++;
+      }else{
+        out[symbol]=makeQuote();
+      }
+    }catch(e){
+      console.warn('Finnhub quote failed:', symbol, e.message);
+      out[symbol]=makeQuote();
+    }
   }
-  throw lastErr || new Error('Yahoo 호출 실패');
+  lastFetchStatus=okCount ? '내 무료서버 + Finnhub 연결 · '+okCount+'/'+unique.length : 'Finnhub 응답 없음';
+  return out;
 }
 async function refreshData(){
   const btn=document.querySelector('.btn.primary');
@@ -143,10 +137,10 @@ async function refreshData(){
 
   try{
     const symbols=[...marketSymbols.map(x=>x.ticker), ...items.etf.map(x=>x.ticker), ...items.stock.map(x=>x.ticker)];
-    const data=await fetchYahoo(symbols);
+    const data=await fetchFinnhub(symbols);
     hasRealData=true;
     market={}; marketSymbols.forEach(m=>market[m.key]=data[m.ticker]||makeQuote());
-    if(market.us10y && market.us10y.price>10) market.us10y.price=market.us10y.price/10;
+    
     quotes={}; [...items.etf,...items.stock].forEach(x=>{quotes[x.ticker]=data[x.ticker]||makeQuote()});
     render();
   }catch(e){
