@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Market Radar - Finnhub Dashboard</title>
+  <title>Market Radar - Finnhub+Naver Dashboard</title>
   <style>
     :root{--bg:#090b13;--panel:#121625;--panel2:#171d30;--line:#252b43;--text:#e9edf9;--muted:#8e98bb;--green:#39e6a7;--red:#ff5a7d;--yellow:#ffd166;--blue:#6d8cff;--chip:#202844;--shadow:0 18px 45px rgba(0,0,0,.35)}
     *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,#17203c 0,#090b13 38%,#07080d 100%);color:var(--text)}
     .wrap{max-width:1180px;margin:0 auto;padding:24px 18px 50px}.top{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:18px}.brand{display:flex;gap:12px;align-items:center}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--green),var(--blue));box-shadow:0 0 35px rgba(80,140,255,.35)}h1{font-size:24px;margin:0;letter-spacing:.18em}.sub{color:var(--muted);font-size:13px;margin-top:5px}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:12px;padding:10px 13px;cursor:pointer;font-weight:700}.btn:hover{border-color:#53618f}.btn.primary{background:linear-gradient(135deg,#24335f,#193c42);border-color:#3c527d}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:linear-gradient(180deg,rgba(23,29,48,.96),rgba(13,16,27,.96));border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}.card.pad{padding:18px}.span3{grid-column:span 3}.span4{grid-column:span 4}.span6{grid-column:span 6}.span8{grid-column:span 8}.span12{grid-column:span 12}.sectionTitle{display:flex;align-items:center;justify-content:space-between;margin:4px 0 14px}.sectionTitle h2{font-size:15px;color:#b5bee0;letter-spacing:.08em;margin:0}.pill{font-size:12px;border:1px solid var(--line);background:var(--chip);color:var(--muted);padding:5px 9px;border-radius:999px}.metric{position:relative;padding-top:5px}.metric:before{content:"";position:absolute;left:0;right:0;top:-18px;height:4px;background:var(--green);border-radius:999px}.metric.down:before{background:var(--red)}.name{font-size:13px;color:var(--muted);font-weight:800;letter-spacing:.08em}.value{font-size:32px;letter-spacing:.05em;margin:14px 0 7px}.chg{font-weight:800}.up{color:var(--green)}.downTxt{color:var(--red)}.flat{color:var(--yellow)}.spark{width:100%;height:54px;margin-top:12px}.summary{font-size:21px;line-height:1.45;font-weight:800}.summary small{display:block;color:var(--muted);font-size:13px;font-weight:500;margin-top:10px}.temp{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}.temp div{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:14px;padding:11px}.temp b{display:block;font-size:18px;margin-top:7px}.list{display:flex;flex-direction:column}.row{display:grid;grid-template-columns:1.4fr .9fr .8fr .8fr auto;gap:10px;align-items:center;padding:13px 0;border-top:1px solid var(--line)}.row:first-child{border-top:0}.ticker{font-weight:900}.desc{color:var(--muted);font-size:12px;margin-top:3px}.price{font-variant-numeric:tabular-nums}.tag{font-size:11px;color:#aeb8df;background:rgba(109,140,255,.13);border:1px solid rgba(109,140,255,.28);padding:4px 8px;border-radius:999px;display:inline-block}.remove{border:0;background:transparent;color:#7884ad;font-size:20px;cursor:pointer}.remove:hover{color:var(--red)}.form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-top:12px}.input,.select{background:#0e1322;border:1px solid var(--line);color:var(--text);border-radius:12px;padding:11px;min-width:0}.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}.tab{background:#101524;border:1px solid var(--line);color:var(--muted);padding:9px 12px;border-radius:999px;cursor:pointer}.tab.active{color:var(--text);border-color:#53618f;background:#1a2440}.hidden{display:none}.news{padding:14px 0;border-top:1px solid var(--line)}.news:first-of-type{border-top:0}.news b{display:block;margin-bottom:6px}.news p{margin:0;color:var(--muted);font-size:13px}.footer{color:var(--muted);font-size:12px;margin-top:14px}.modal{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:16px}.modal.show{display:flex}.modalBox{width:min(720px,100%);background:#111725;border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:var(--shadow)}textarea{width:100%;min-height:210px;background:#090d18;color:#dce3ff;border:1px solid var(--line);border-radius:14px;padding:12px;font-family:ui-monospace,Consolas,monospace;font-size:12px}.help{color:var(--muted);font-size:13px;line-height:1.55}.mobileDock{display:none}
-    @media(max-width:640px){body{padding-bottom:74px}.wrap{padding:16px 12px 38px}.logo{width:38px;height:38px;border-radius:12px}h1{font-size:18px;letter-spacing:.12em}.sub{font-size:12px}.actions{width:100%}.actions .btn{flex:1;text-align:center;padding:10px 8px}.card{border-radius:17px}.card.pad{padding:15px}.summary{font-size:18px}.temp{grid-template-columns:1fr 1fr}.temp div{padding:10px}.row{grid-template-columns:1fr auto auto;gap:8px;padding:12px 0}.row .price{display:none}.row div:nth-child(4){display:none}.ticker{font-size:14px}.desc{font-size:11px}.sectionTitle h2{font-size:13px}.form{grid-template-columns:1fr}.modalBox{padding:15px}.mobileDock{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:10px;right:10px;bottom:10px;background:rgba(17,23,37,.94);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);z-index:20;backdrop-filter:blur(10px);overflow:hidden}.mobileDock button{background:transparent;border:0;color:var(--text);padding:9px 4px;font-weight:900}.mobileDock span{display:block;font-size:10px;color:var(--muted);font-weight:700;margin-top:2px}}
-    @media(min-width:901px){.desktopOnly{display:block}}@media(max-width:900px){.span3,.span4,.span6,.span8{grid-column:span 12}.temp{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:1fr .8fr .7fr auto}.row .price{display:none}.form{grid-template-columns:1fr 1fr}.top{align-items:flex-start;flex-direction:column}.value{font-size:28px}}
+    @media(max-width:640px){body{padding-bottom:74px}.wrap{padding:16px 12px 38px}.logo{width:38px;height:38px;border-radius:12px}h1{font-size:18px;letter-spacing:.12em}.sub{font-size:12px}.actions{width:100%}.actions .btn{flex:1;text-align:center;padding:10px 8px}.card{border-radius:17px}.card.pad{padding:15px}.summary{font-size:18px}.temp{grid-template-columns:1fr 1fr}.temp div{padding:10px}.row{grid-template-columns:1fr auto auto auto;gap:8px;padding:12px 0}.row .price{display:block;font-size:13px;color:var(--text)}.row div:nth-child(4){display:none}.ticker{font-size:14px}.desc{font-size:11px}.sectionTitle h2{font-size:13px}.form{grid-template-columns:1fr}.modalBox{padding:15px}.mobileDock{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:10px;right:10px;bottom:10px;background:rgba(17,23,37,.94);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);z-index:20;backdrop-filter:blur(10px);overflow:hidden}.mobileDock button{background:transparent;border:0;color:var(--text);padding:9px 4px;font-weight:900}.mobileDock span{display:block;font-size:10px;color:var(--muted);font-weight:700;margin-top:2px}}
+    @media(min-width:901px){.desktopOnly{display:block}}@media(max-width:900px){.span3,.span4,.span6,.span8{grid-column:span 12}.temp{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:1fr auto auto auto}.row .price{display:block}.form{grid-template-columns:1fr 1fr}.top{align-items:flex-start;flex-direction:column}.value{font-size:28px}}
   </style>
 </head>
 <body>
@@ -32,7 +32,7 @@
       <div id="tab_edit" class="hidden"><div class="grid"><div class="span6"><div class="sectionTitle"><h2>ETF 추가</h2></div><div class="form"><input class="input" id="etfTicker" placeholder="티커 예: 490090.KS"><input class="input" id="etfName" placeholder="이름 예: TIGER 데이터센터"><select class="select" id="etfTheme"><option>데이터센터</option><option>전력</option><option>광통신</option><option>기타</option></select><button class="btn primary" onclick="addItem('etf')">추가</button></div><p class="help">국내 ETF는 데이터 소스에 따라 종목코드 뒤에 .KS가 필요할 수 있음.</p></div><div class="span6"><div class="sectionTitle"><h2>개별주 추가</h2></div><div class="form"><input class="input" id="stockTicker" placeholder="티커 예: 005930.KS"><input class="input" id="stockName" placeholder="이름 예: 삼성전자"><select class="select" id="stockTheme"><option>국내</option><option>메모리</option><option>AI 인프라</option><option>관심</option></select><button class="btn primary" onclick="addItem('stock')">추가</button></div><p class="help">미국주는 MU, ORCL처럼 입력. 국내주는 005930.KS 같은 형식을 기본으로 잡았음.</p></div></div></div>
       <div id="tab_news" class="hidden"><div class="news"><b>뉴스 연동 전 임시 메모</b><p>여기에는 나중에 Oracle / HBM / AI datacenter / power / optical network 키워드 뉴스를 붙이면 됨.</p></div><div class="news"><b>데이터 연결 단계</b><p>현재 파일은 Vercel API(/api/quote)를 통해 Finnhub 데이터를 호출합니다. 실패 시 임의 가격을 보여주지 않습니다.</p></div></div>
     </div>
-    <div class="span12 footer">※ Finnhub + Vercel 무료서버 연결 v6입니다. 미국주식은 우선 실제 데이터로 연결하고, 국내 ETF/한국주식은 미지원 시 데이터 없음으로 표시됩니다.</div>
+    <div class="span12 footer">※ v7: 미국주식은 Finnhub, 국내주식/국내 ETF는 네이버금융, 환율은 네이버 시장지표를 통해 조회합니다. QQQ/SOXX는 지수 자체가 아니라 대용 ETF입니다.</div>
   </div>
 </div>
 
@@ -46,7 +46,7 @@
 <div class="modal" id="modal"><div class="modalBox"><div class="sectionTitle"><h2>종목 일괄편집</h2><button class="btn" onclick="closeSettings()">닫기</button></div><p class="help">JSON을 직접 고쳐도 됨. ticker/name/theme만 유지하면 됩니다.</p><textarea id="settingsText"></textarea><div class="actions" style="margin-top:12px"><button class="btn primary" onclick="saveSettings()">저장</button><button class="btn" onclick="closeSettings()">취소</button></div></div></div>
 
 <script>
-const KEY='marketRadarItemsV2_YAHOO';
+const KEY='marketRadarItemsV7_NAVER';
 const CONFIG_KEY='marketRadarConfigV1';
 const defaultItems={
   etf:[
@@ -64,12 +64,12 @@ const defaultItems={
   ]
 };
 const marketSymbols=[
-  {key:'nasdaq',ticker:'QQQ',name:'NASDAQ 대용(QQQ)'},
-  {key:'sox',ticker:'SOXX',name:'SOX 대용(SOXX)'},
-  {key:'usdkrw',ticker:'OANDA:USD_KRW',name:'USD/KRW'},
-  {key:'vix',ticker:'VIXY',name:'VIX 대용(VIXY)'},
+  {key:'nasdaq',ticker:'QQQ',name:'QQQ'},
+  {key:'sox',ticker:'SOXX',name:'SOXX'},
+  {key:'usdkrw',ticker:'USDKRW',name:'USD/KRW'},
+  {key:'vix',ticker:'VIX',name:'VIX'},
   {key:'wti',ticker:'USO',name:'WTI 대용(USO)'},
-  {key:'us10y',ticker:'IEF',name:'미국10년물 대용(IEF)'}
+  {key:'us10y',ticker:'IEF',name:'미국채 대용(IEF)'}
 ];
 let items=loadItems(); let market={}; let quotes={}; let lastFetchStatus='대기'; let hasRealData=false;
 function loadItems(){try{return JSON.parse(localStorage.getItem(KEY))||structuredClone(defaultItems)}catch(e){return structuredClone(defaultItems)}}
@@ -97,7 +97,7 @@ function fillSample(){
   market={nasdaq:makeQuote(),sox:makeQuote(),usdkrw:makeQuote(),vix:makeQuote(),wti:makeQuote(),us10y:makeQuote()};
   quotes={}; [...items.etf,...items.stock].forEach(x=>quotes[x.ticker]=makeQuote());
 }
-async function fetchFinnhub(symbols){
+async function fetchQuotes(symbols){
   const unique=[...new Set(symbols.filter(Boolean))];
   const cfg=loadConfig();
   const base=(cfg.proxyUrl||location.origin).replace(/\/$/,'');
@@ -106,21 +106,31 @@ async function fetchFinnhub(symbols){
   for(const symbol of unique){
     try{
       const url=base+'/api/quote?symbol='+encodeURIComponent(symbol);
-      const res=await fetchWithTimeout(url,6500);
+      const res=await fetchWithTimeout(url,7000);
       if(!res.ok) throw new Error(symbol+' HTTP '+res.status);
       const q=await res.json();
       if(q && typeof q.c==='number' && q.c!==0){
-        out[symbol]={price:q.c, chg:q.dp, absChange:q.d, prev:q.pc, high:q.h, low:q.l, open:q.o, source:'finnhub'};
+        out[symbol]={
+          price:q.c,
+          chg: typeof q.dp==='number' ? q.dp : 0,
+          absChange: typeof q.d==='number' ? q.d : null,
+          prev:q.pc ?? null,
+          high:q.h ?? null,
+          low:q.l ?? null,
+          open:q.o ?? null,
+          source:q.source || (symbol.endsWith('.KS')?'naver':'finnhub'),
+          currency:q.currency || ''
+        };
         okCount++;
       }else{
         out[symbol]=makeQuote();
       }
     }catch(e){
-      console.warn('Finnhub quote failed:', symbol, e.message);
+      console.warn('quote failed:', symbol, e.message);
       out[symbol]=makeQuote();
     }
   }
-  lastFetchStatus=okCount ? '내 무료서버 + Finnhub 연결 · '+okCount+'/'+unique.length : 'Finnhub 응답 없음';
+  lastFetchStatus=okCount ? '내 무료서버 연결 · '+okCount+'/'+unique.length : '실시간 응답 없음';
   return out;
 }
 async function refreshData(){
@@ -137,7 +147,7 @@ async function refreshData(){
 
   try{
     const symbols=[...marketSymbols.map(x=>x.ticker), ...items.etf.map(x=>x.ticker), ...items.stock.map(x=>x.ticker)];
-    const data=await fetchFinnhub(symbols);
+    const data=await fetchQuotes(symbols);
     hasRealData=true;
     market={}; marketSymbols.forEach(m=>market[m.key]=data[m.ticker]||makeQuote());
     
@@ -164,8 +174,8 @@ function extraInfo(q){
 }
 function renderList(type,id){const root=document.getElementById(id); root.innerHTML=''; items[type].forEach((x,idx)=>{const q=quotes[x.ticker]||makeQuote(); const valid=q.price!==null&&q.price!==undefined; const up=valid ? (q.chg||0)>=0 : true; root.insertAdjacentHTML('beforeend',`<div class="row"><div><div class="ticker">${x.name}</div><div class="desc">${x.ticker} · <span class="tag">${x.theme}</span>${valid?'':' · 연결 실패'}</div>${extraInfo(q)}</div><div class="price">${valid?fmt(q.price):'-'}</div><div class="chg ${valid?(up?'up':'downTxt'):'flat'}">${valid?(up?'▲':'▼')+' '+Math.abs(q.chg||0).toFixed(2)+'%':'데이터 없음'}</div><div>${verdict(valid?q.chg:null)}</div><button class="remove" onclick="removeItem('${type}',${idx})">×</button></div>`)});}
 function avgChange(arr){const vals=arr.map(x=>quotes[x.ticker]?.chg).filter(v=>typeof v==='number'); return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null}
-function render(){renderMetric('m_nasdaq','NASDAQ',market.nasdaq);renderMetric('m_sox','SOX',market.sox);renderMetric('m_usdkrw','USD/KRW',market.usdkrw);renderMetric('m_vix','VIX',market.vix);
- const sc=score(); const mood=!hasRealData?'⚠️ 실시간 연결 실패':sc>=2?'🟢 Risk-on':sc<=-2?'🔴 Risk-off':'🟡 혼조'; document.getElementById('summary').innerHTML=!hasRealData?`${mood}. 현재 브라우저에서 Yahoo/무료 프록시 호출이 막혀 실제 시세를 표시하지 않습니다.<small>${lastFetchStatus} · 이 버전부터는 임의 샘플 가격을 실제처럼 보여주지 않음.</small>`:`${mood}. ${(market.sox?.chg||0)>=0?'반도체 쪽에 돈이 들어오는 흐름':'반도체가 눌리는 흐름'}이고, 환율은 ${(market.usdkrw?.chg||0)>=0?'상승':'하락'} 중.<small>${lastFetchStatus} · ETF 3개와 삼성전자·하이닉스·스퀘어를 먼저 보는 구조.</small>`;
+function render(){renderMetric('m_nasdaq','QQQ',market.nasdaq);renderMetric('m_sox','SOXX',market.sox);renderMetric('m_usdkrw','USD/KRW',market.usdkrw);renderMetric('m_vix','VIX',market.vix);
+ const sc=score(); const mood=!hasRealData?'⚠️ 실시간 연결 실패':sc>=2?'🟢 Risk-on':sc<=-2?'🔴 Risk-off':'🟡 혼조'; document.getElementById('summary').innerHTML=!hasRealData?`${mood}. 현재 무료서버/API 호출이 실패해 실제 시세를 표시하지 않습니다.<small>${lastFetchStatus} · 이 버전부터는 임의 샘플 가격을 실제처럼 보여주지 않음.</small>`:`${mood}. ${(market.sox?.chg||0)>=0?'반도체 쪽에 돈이 들어오는 흐름':'반도체가 눌리는 흐름'}이고, 환율은 ${(market.usdkrw?.chg||0)>=0?'상승':'하락'} 중.<small>${lastFetchStatus} · 국내주/ETF는 네이버, 미국주는 Finnhub로 보는 구조.</small>`;
  document.getElementById('temp').innerHTML=`<div>반도체<b>${verdict(market.sox?.chg)}</b></div><div>환율<b>${!hasRealData?'데이터 없음':(market.usdkrw?.chg||0)>0?'🟡 부담':'🟢 우호'}</b></div><div>VIX<b>${!hasRealData?'데이터 없음':(market.vix?.chg||0)<0?'🟢 안정':'🔴 불안'}</b></div><div>유가<b>${!hasRealData?'데이터 없음':(market.wti?.chg||0)>0?'🟡 상승':'🟢 하락'}</b></div><div>10년물<b>${!hasRealData?'데이터 없음':(market.us10y?.chg||0)>0?'🟡 상승':'🟢 하락'}</b></div>`;
  document.getElementById('updated').textContent='업데이트 '+new Date().toLocaleString('ko-KR'); renderList('etf','etfList'); renderList('stock','stockList'); drawChain();}
 function drawChain(){const c=document.getElementById('chainCanvas'),ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); if(!hasRealData){ctx.fillStyle='#9da8ce';ctx.font='16px system-ui';ctx.fillText('실제 데이터 연결 실패',24,85);ctx.font='12px system-ui';ctx.fillText('무료 서버/프록시 연결이 필요함',24,112);return;} const dc=avgChange(items.etf.filter(x=>x.theme.includes('데이터'))); const power=avgChange(items.etf.filter(x=>x.theme.includes('전력'))); const optical=avgChange(items.etf.filter(x=>x.theme.includes('광'))); const domestic=avgChange(items.stock.filter(x=>x.theme.includes('국내'))); const labels=['시장','데이터센터','전력','광통신','국내']; const vals=[market.nasdaq?.chg, dc, power, optical, domestic]; labels.forEach((l,i)=>{const v=typeof vals[i]==='number'?vals[i]:0; let x=24+i*78, h=80+v*18; h=Math.max(18,Math.min(145,h)); ctx.fillStyle=v>=0?'#39e6a7':'#ff5a7d'; ctx.globalAlpha=.85; ctx.fillRect(x,150-h,42,h); ctx.globalAlpha=1; ctx.fillStyle='#9da8ce'; ctx.font='13px system-ui'; ctx.fillText(l,x-2,174); ctx.fillStyle='#e9edf9'; ctx.fillText((typeof vals[i]==='number'?v.toFixed(1)+'%':'-'),x-1,150-h-8)})}
@@ -177,7 +187,7 @@ function resetAll(){if(confirm('기본값으로 되돌릴까?')){items=structure
 function setProxyUrl(){
   const cfg=loadConfig();
   const current=cfg.proxyUrl||'';
-  const url=prompt('Cloudflare Worker 주소를 붙여넣어줘. 예: https://market-radar-proxy.xxx.workers.dev', current);
+  const url=prompt('Vercel 주소를 붙여넣어줘. 예: https://market-radar-xi.vercel.app', current);
   if(url===null)return;
   cfg.proxyUrl=url.trim().replace(/\/$/,'');
   saveConfig(cfg);
